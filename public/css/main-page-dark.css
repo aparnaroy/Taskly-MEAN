@@ -67,7 +67,7 @@ body.dark-mode .circle::before {
     background: #111;
 }
 
-body.dark-mode .completed .circle::before {
+body.dark-mode .circle.completed::before {
     background: transparent /* Remove the inner circle fill on click */
 }
 

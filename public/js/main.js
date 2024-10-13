@@ -11,8 +11,6 @@ $(function () {
         setTimeout(function() {
             addButton.css('filter', 'brightness(1)');
         }, 200);
-
-        addTask();
     });
 });
 
@@ -57,49 +55,8 @@ function toggleLightDarkMode() {
 }
 
 
+
 // Task List Functions
-
-// function addTask() {
-//     const input = document.getElementById('newTaskInput');
-//     const taskList = document.getElementById('taskList');
-
-//     if (input.value.trim() === '') return; // Ignore empty input
-
-//     const newTask = document.createElement('li');
-//     newTask.innerHTML = `<div class="circle" onclick="taskCompleted(event)"></div>
-//                         <div class="task-input task-text" contenteditable="true" onblur="updateTask(event)">${input.value}</div>
-//                         <img src="./img/delete.png" class="delete-button" onclick="deleteTask(event)" alt="Delete"/>`;
-//     taskList.appendChild(newTask);
-
-//     input.value = ''; // Clear the input field
-// }
-
-// function deleteTask(event) {
-//     const listItem = event.currentTarget.closest('li');
-//     listItem.style.transition = 'opacity 0.5s ease'; // Add a transition for smooth removal
-//     listItem.style.opacity = '0'; // Fade out
-
-//     // Remove the item after the fade-out transition
-//     setTimeout(() => {
-//         listItem.remove();
-//     }, 500); // Match the duration with the CSS transition
-// }
-
-// function taskCompleted(event) {
-//     const listItem = event.currentTarget.closest('li');
-//     listItem.classList.toggle('completed'); // Toggle the completed class
-
-//     const taskInput = listItem.querySelector('.task-text');
-
-//     if (taskInput) {
-//         taskInput.classList.toggle('completed'); // Toggle the completed class for the input
-//     }
-
-//     // Trigger confetti effect if task completed
-//     if (listItem.classList.contains('completed')) {
-//         createConfetti();
-//     }
-// }
 
 // Fetch and display tasks when the page loads
 $(document).ready(function() {
@@ -116,7 +73,7 @@ async function fetchTasks() {
     tasks.forEach(task => {
         const taskItem = document.createElement('li');
         taskItem.innerHTML = `
-            <div class="circle" onclick="taskCompleted(event, '${task._id}')"></div>
+            <div class="circle ${task.completed ? 'completed' : ''}" onclick="taskCompleted(event, '${task._id}')"></div>
             <div class="task-input task-text ${task.completed ? 'completed' : ''}" contenteditable="true" onblur="updateTask(event, '${task._id}')">${task.text}</div>
             <img src="./img/delete.png" class="delete-button" onclick="deleteTask(event, '${task._id}')" alt="Delete"/>
         `;
@@ -168,7 +125,20 @@ async function updateTask(event, taskId) {
 
 async function taskCompleted(event, taskId) {
     const listItem = event.currentTarget.closest('li');
-    const isCompleted = listItem.classList.toggle('completed');
+    const taskInput = listItem.querySelector('.task-text');
+    const circle = listItem.querySelector('.circle');
+
+    // Determine the new completion state
+    const isCompleted = !taskInput.classList.contains('completed');
+
+    if (taskInput && circle) {
+        taskInput.classList.toggle('completed', isCompleted); 
+        circle.classList.toggle('completed', isCompleted);
+    }
+    // Trigger confetti effect if task completed
+    if (isCompleted) {
+        createConfetti();
+    }
 
     await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
         method: 'PUT',
@@ -177,8 +147,6 @@ async function taskCompleted(event, taskId) {
         },
         body: JSON.stringify({ completed: isCompleted })
     });
-
-    fetchTasks(); // Refresh task list
 }
 
 

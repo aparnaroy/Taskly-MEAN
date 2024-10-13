@@ -340,20 +340,12 @@ body {
 }
 
 /* Completed state for circle and list item */
-.completed .circle::before {
+.circle.completed::before {
     background: transparent; /* Remove the inner circle fill */
 }
 
-/* Completed list item text */
-.completed {
-    color: #a3a1a1; /* Gray out the text */
-    position: relative;
-    padding-left: 30px; /* Space for the circle */
-    transition: color 0.3s ease; /* Smooth color transition */
-}
-
 /* Strike-through effect, only under the text */
-.completed .task-text {
+.task-text.completed {
     position: relative;
     color: #a3a1a1;     /* Gray out the text */
 }
@@ -363,21 +355,6 @@ body {
     padding-left: 0px;
     transition: color 0.3s ease;
 }
-
-/* .task-text::before {
-    content: '';
-    position: absolute;
-    bottom: 50%;
-    left: 0;
-    width: 0;
-    height: 1.5px;
-    background-color: #a3a1a1;   Strike through color
-    transition: width 0.5s ease;
-}
-
-.completed .task-text::before {
-    width: 100%;
-} */
 
 .delete-button {
     padding: 6px;
@@ -410,7 +387,7 @@ body {
 }
 
 /* Strike-through effect for completed input tasks */
-.completed .task-input {
+.task-input.completed {
     text-decoration: line-through; /* Apply the strike-through effect */
     color: #a3a1a1; /* Gray out the text */
 }

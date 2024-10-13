@@ -9,7 +9,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 const username = process.env.MONGO_USERNAME;
 const password = process.env.MONGO_PASSWORD;
 const database = process.env.MONGO_DATABASE;
@@ -31,7 +31,8 @@ mongoose.connect(`mongodb+srv://${username}:${password}@${host}/${database}${opt
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err));
 
-// Define Task model
+
+// Task model
 const TaskSchema = new mongoose.Schema({
   text: String,
   completed: Boolean
@@ -40,6 +41,7 @@ const TaskSchema = new mongoose.Schema({
 });
 
 const Task = mongoose.model('Task', TaskSchema);
+
 
 // Routes
 app.get('/', (req, res) => {
@@ -78,6 +80,6 @@ app.delete('/api/tasks/:id', async (req, res) => {
 });
 
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
