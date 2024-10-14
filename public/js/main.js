@@ -60,11 +60,21 @@ function toggleLightDarkMode() {
 
 // Fetch and display tasks when the page loads
 $(document).ready(function() {
-    fetchTasks();
+    if (sessionStorage.getItem('token') !== null) {
+        fetchTasks();
+    } else {
+        window.location.href = "index.html"; // Redirect to the home page
+    }
 });
 
 async function fetchTasks() {
-    const response = await fetch('http://localhost:3000/api/tasks');
+    const token = sessionStorage.getItem('token'); // Get the token from session storage
+    const response = await fetch('http://localhost:3000/api/tasks', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}` // Include the token in the request
+        }
+    });
     const tasks = await response.json();
     
     const taskList = document.getElementById('taskList');
@@ -88,11 +98,14 @@ async function addTask() {
     const newTask = {
         text: input.value
     };
+    
+    const token = sessionStorage.getItem('token');
 
     await fetch('http://localhost:3000/api/tasks', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify(newTask)
     });
@@ -102,8 +115,13 @@ async function addTask() {
 }
 
 async function deleteTask(event, taskId) {
+    const token = sessionStorage.getItem('token');
+
     await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
     });
 
     fetchTasks(); // Refresh task list
@@ -111,11 +129,13 @@ async function deleteTask(event, taskId) {
 
 async function updateTask(event, taskId) {
     const taskText = event.target.textContent;
+    const token = sessionStorage.getItem('token');
 
     await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ text: taskText })
     });
@@ -127,6 +147,7 @@ async function taskCompleted(event, taskId) {
     const listItem = event.currentTarget.closest('li');
     const taskInput = listItem.querySelector('.task-text');
     const circle = listItem.querySelector('.circle');
+    const token = sessionStorage.getItem('token');
 
     // Determine the new completion state
     const isCompleted = !taskInput.classList.contains('completed');
@@ -143,7 +164,8 @@ async function taskCompleted(event, taskId) {
     await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ completed: isCompleted })
     });

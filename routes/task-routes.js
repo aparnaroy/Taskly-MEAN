@@ -1,12 +1,25 @@
 const express = require('express');
 const Task = require('../models/Task');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
+// Middleware to authenticate the user
+const authenticateJWT = (req, res, next) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.sendStatus(403);
+  
+    jwt.verify(token.split(' ')[1], process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user; // Save the user data in request
+        next();
+    });
+};
+
 // Get all tasks
-router.get('/', async (req, res) => {
+router.get('/', authenticateJWT, async (req, res) => {
     try {
-        const tasks = await Task.find();
+        const tasks = await Task.find({ _userId: req.user.id });
         res.json(tasks);
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
@@ -14,8 +27,9 @@ router.get('/', async (req, res) => {
 });
 
 // Add a new task
-router.post('/', async (req, res) => {
+router.post('/', authenticateJWT, async (req, res) => {
     const newTask = new Task({
+        _userId: req.user.id,
         text: req.body.text,
         completed: false
     });
@@ -28,9 +42,9 @@ router.post('/', async (req, res) => {
 });
 
 // Update a task (complete or update text)
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticateJWT, async (req, res) => {
     try {
-        const task = await Task.findById(req.params.id);
+        const task = await Task.findOne({ _id: req.params.id, _userId: req.user.id });
         if (!task) return res.status(404).json({ message: 'Task not found' });
 
         task.text = req.body.text || task.text;
@@ -43,9 +57,9 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete a task
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateJWT, async (req, res) => {
     try {
-        const result = await Task.findByIdAndDelete(req.params.id);
+        const result = await Task.findOneAndDelete({ _id: req.params.id, _userId: req.user.id });
         if (!result) return res.status(404).json({ message: 'Task not found' });
         res.json(result);
     } catch (error) {

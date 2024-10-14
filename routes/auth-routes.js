@@ -46,9 +46,8 @@ router.post('/login', async (req, res) => {
     res.json({ token, username: user.username });
 });
 
-// Logout (optional)
+// Logout
 router.post('/logout', (req, res) => {
-    // Clear session or token on client side
     res.json({ message: 'Logged out' });
 });
 

@@ -64,7 +64,7 @@ async function signIn() {
         // Store user info
         sessionStorage.setItem('username', data.username);
         sessionStorage.setItem('token', data.token);
-        window.location.href = "main-page.html"; // Redirect to main app page
+        window.location.href = "start-up.html";
     } else {
         alert(data.message);
     }
@@ -72,7 +72,6 @@ async function signIn() {
 
 async function signOut() {
     sessionStorage.clear();
-    // Optionally call your logout API
     await fetch('http://localhost:3000/api/auth/logout', { method: 'POST' });
     window.location.href = "index.html";
 }

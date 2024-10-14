@@ -82,7 +82,7 @@ body {
     display: flex;
     align-items: center; /* Center align items vertically */
     margin-left: auto; /* Push to the right end */
-    padding: 20px 40px; /* Optional: Add some padding for spacing */
+    padding: 20px 40px; /* Add some padding for spacing */
 }
 
 .username {
@@ -114,7 +114,7 @@ body {
 .user-dropdown {
     display: none; /* Hidden by default */
     position: absolute;
-    top: 80px; /* Adjust based on where you want the dropdown to appear */
+    top: 80px;
     right: 30px;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -220,7 +220,7 @@ body {
 }
 
 #list-title:focus {
-    border-bottom: 1px solid #111; /* Optional: underline on focus */
+    border-bottom: 1px solid #111; /* Underline on focus */
 }
 
 /* Center the box by default */
@@ -387,7 +387,7 @@ body {
 }
 
 .task-input:focus {
-    border-bottom: 1px solid #0279c9; /* Optional: underline on focus */
+    border-bottom: 1px solid #0279c9; /* Underline on focus */
 }
 
 /* Strike-through effect for completed input tasks */

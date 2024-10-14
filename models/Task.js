@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
-    // _userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+    _userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
     text: String,
     completed: Boolean
   }, {

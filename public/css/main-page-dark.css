@@ -33,7 +33,7 @@ body.dark-mode #list-title {
 }
 
 body.dark-mode #list-title:focus {
-    border-bottom: 1px solid #eee; /* Optional: underline on focus */
+    border-bottom: 1px solid #eee; /* Underline on focus */
 }
 
 body.dark-mode .box {
