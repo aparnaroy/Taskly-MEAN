@@ -64,17 +64,9 @@ $(document).ready(function() {
 });
 
 async function fetchTasks() {
-    const response = await fetch('http://localhost:3000/api/tasks', {
-        method: 'GET',
-        credentials: 'include' // Important: This ensures cookies (session) are sent with the request
-    });
-
-    if (!response.ok) {
-        console.error('Failed to fetch tasks:', response.statusText);
-        return;
-    }
-
+    const response = await fetch('http://localhost:3000/api/tasks');
     const tasks = await response.json();
+    
     const taskList = document.getElementById('taskList');
     taskList.innerHTML = ''; // Clear the list
 
@@ -97,34 +89,22 @@ async function addTask() {
         text: input.value
     };
 
-    const response = await fetch('http://localhost:3000/api/tasks', {
+    await fetch('http://localhost:3000/api/tasks', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newTask),
-        credentials: 'include'
+        body: JSON.stringify(newTask)
     });
-
-    if (!response.ok) {
-        console.error('Failed to add task:', response.statusText);
-        return;
-    }
 
     input.value = ''; // Clear input
     fetchTasks(); // Refresh task list
 }
 
 async function deleteTask(event, taskId) {
-    const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
-        method: 'DELETE',
-        credentials: 'include'
+    await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+        method: 'DELETE'
     });
-
-    if (!response.ok) {
-        console.error('Failed to delete task:', response.statusText);
-        return;
-    }
 
     fetchTasks(); // Refresh task list
 }
@@ -132,19 +112,13 @@ async function deleteTask(event, taskId) {
 async function updateTask(event, taskId) {
     const taskText = event.target.textContent;
 
-    const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+    await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: taskText }),
-        credentials: 'include'
+        body: JSON.stringify({ text: taskText })
     });
-
-    if (!response.ok) {
-        console.error('Failed to update task:', response.statusText);
-        return;
-    }
 
     fetchTasks(); // Refresh task list
 }
@@ -166,19 +140,13 @@ async function taskCompleted(event, taskId) {
         createConfetti();
     }
 
-    const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+    await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ completed: isCompleted }),
-        credentials: 'include'
+        body: JSON.stringify({ completed: isCompleted })
     });
-
-    if (!response.ok) {
-        console.error('Failed to update task completion:', response.statusText);
-        return;
-    }
 }
 
 
