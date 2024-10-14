@@ -133,6 +133,10 @@ body {
     color: #111;
 }
 
+.dropdown-username {
+    text-align: center;
+}
+
 .logout-button {
     background-color: #7a11dc; 
     color: white;

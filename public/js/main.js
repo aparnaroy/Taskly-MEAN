@@ -64,9 +64,17 @@ $(document).ready(function() {
 });
 
 async function fetchTasks() {
-    const response = await fetch('http://localhost:3000/api/tasks');
+    const response = await fetch('http://localhost:3000/api/tasks', {
+        method: 'GET',
+        credentials: 'include' // Important: This ensures cookies (session) are sent with the request
+    });
+
+    if (!response.ok) {
+        console.error('Failed to fetch tasks:', response.statusText);
+        return;
+    }
+
     const tasks = await response.json();
-    
     const taskList = document.getElementById('taskList');
     taskList.innerHTML = ''; // Clear the list
 
@@ -89,22 +97,34 @@ async function addTask() {
         text: input.value
     };
 
-    await fetch('http://localhost:3000/api/tasks', {
+    const response = await fetch('http://localhost:3000/api/tasks', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newTask)
+        body: JSON.stringify(newTask),
+        credentials: 'include'
     });
+
+    if (!response.ok) {
+        console.error('Failed to add task:', response.statusText);
+        return;
+    }
 
     input.value = ''; // Clear input
     fetchTasks(); // Refresh task list
 }
 
 async function deleteTask(event, taskId) {
-    await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
-        method: 'DELETE'
+    const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+        method: 'DELETE',
+        credentials: 'include'
     });
+
+    if (!response.ok) {
+        console.error('Failed to delete task:', response.statusText);
+        return;
+    }
 
     fetchTasks(); // Refresh task list
 }
@@ -112,13 +132,19 @@ async function deleteTask(event, taskId) {
 async function updateTask(event, taskId) {
     const taskText = event.target.textContent;
 
-    await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+    const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: taskText })
+        body: JSON.stringify({ text: taskText }),
+        credentials: 'include'
     });
+
+    if (!response.ok) {
+        console.error('Failed to update task:', response.statusText);
+        return;
+    }
 
     fetchTasks(); // Refresh task list
 }
@@ -140,13 +166,19 @@ async function taskCompleted(event, taskId) {
         createConfetti();
     }
 
-    await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+    const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ completed: isCompleted })
+        body: JSON.stringify({ completed: isCompleted }),
+        credentials: 'include'
     });
+
+    if (!response.ok) {
+        console.error('Failed to update task completion:', response.statusText);
+        return;
+    }
 }
 
 
@@ -210,21 +242,14 @@ function toggleDropdown() {
 }
 
 $(document).ready(function() {
-    // Retrieve user info from sessionStorage
+    // Retrieve username from sessionStorage
     const username = sessionStorage.getItem('username');
-    const userInitial = sessionStorage.getItem('userInitial');
-    const email = sessionStorage.getItem('userEmail');
-
-    console.log(username, userInitial, email);
 
     // Check if username exists, then update the UI
     if (username) {
-        document.querySelector('.username').textContent = `Welcome, ${username}`;
-        document.querySelector('.user-circle').textContent = userInitial;
-    }
-
-    if (email) {
-        document.querySelector('.user-email').textContent = email;
+        document.querySelector('.username').textContent = `Welcome, ${username.charAt(0).toUpperCase() + username.slice(1)}`;
+        document.querySelector('.user-circle').textContent = username.charAt(0).toUpperCase();
+        document.querySelector('.dropdown-username').textContent = username;
     }
 
     // Call the function on page load to ensure layout is correct

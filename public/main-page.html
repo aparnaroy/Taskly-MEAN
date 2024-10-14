@@ -19,13 +19,12 @@
         <div class="top-nav">
             <div class="right-top-navbar">
                 <img src="./img/lightdark-icon-black.png" class="mode-icon" id="lightdarkIcon" onclick="toggleLightDarkMode()">
-                <!------- TODO: Remove placeholder username, user-circle, and user-email text -------->
-                <span class="username">Welcome, Royal Devil</span> 
-                <div class="user-circle" onclick="toggleDropdown()">R</div>
+                <span class="username">Welcome, </span> 
+                <div class="user-circle" onclick="toggleDropdown()"></div>
 
                 <!-- Dropdown Menu -->
                 <div class="user-dropdown" id="userDropdown">
-                    <p class="user-email">royaldevil@gmail.com</p> <!-- User email will be displayed here -->
+                    <p class="dropdown-username"></p>
                     <button class="logout-button" onclick="signOut()">Log Out</button>
                 </div>
             </div>
