@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Taskly | Register</title>
+    <link rel="icon" href="./img/favicon.ico" type="image/x-icon"/>
+    <link href="./css/login.css" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+    <div class="form-container">
+        <h1>Create an Account</h1>
+        <form id="registerForm">
+            <input type="text" id="registerUsername" name="username" placeholder="Username" required autocomplete="username">
+            <input type="password" id="registerPassword" name="password" placeholder="Password" required autocomplete="current-password">
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="login.html">Log in here</a></p>
+    </div>
+
+    <script src="./js/auth.js"></script>
+</body>
+
+</html>
