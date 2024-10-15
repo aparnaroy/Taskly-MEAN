@@ -17,6 +17,7 @@ const password = process.env.MONGO_PASSWORD;
 const database = process.env.MONGO_DATABASE;
 const host = process.env.MONGO_HOST;
 const options = process.env.MONGO_OPTIONS;
+const apiBaseUrl = `${process.env.API_BASE_URL}:${port}`;
 
 // MongoDB Connection
 mongoose.connect(`mongodb+srv://${username}:${password}@${host}/${database}${options}`, {
@@ -48,7 +49,7 @@ app.use('/api/tasks', taskRoutes);
 
 app.get('/api/config', (req, res) => {
   res.json({
-      apiBaseUrl: process.env.API_BASE_URL
+      apiBaseUrl: apiBaseUrl
   });
 });
 
