@@ -46,6 +46,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 
+app.get('/api/config', (req, res) => {
+  res.json({
+      apiBaseUrl: process.env.API_BASE_URL
+  });
+});
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

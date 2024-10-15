@@ -6,6 +6,12 @@ function redirectToRegister() {
     window.location.href = "register.html";
 }
 
+async function fetchConfig() {
+    const response = await fetch('/api/config');
+    const config = await response.json();
+    return config.apiBaseUrl;
+}
+
 $(document).ready(function() {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
@@ -29,8 +35,9 @@ $(document).ready(function() {
 async function register() {
     const username = document.getElementById('registerUsername').value;
     const password = document.getElementById('registerPassword').value;
+    const apiBaseUrl = await fetchConfig();
 
-    const response = await fetch('http://localhost:3000/api/auth/register', {
+    const response = await fetch(`${apiBaseUrl}/api/auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -50,8 +57,9 @@ async function register() {
 async function signIn() {
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
+    const apiBaseUrl = await fetchConfig();
 
-    const response = await fetch('http://localhost:3000/api/auth/login', {
+    const response = await fetch(`${apiBaseUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -71,7 +79,8 @@ async function signIn() {
 }
 
 async function signOut() {
+    const apiBaseUrl = await fetchConfig();
     sessionStorage.clear();
-    await fetch('http://localhost:3000/api/auth/logout', { method: 'POST' });
+    await fetch(`${apiBaseUrl}/api/auth/logout`, { method: 'POST' });
     window.location.href = "index.html";
 }

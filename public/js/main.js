@@ -67,9 +67,16 @@ $(document).ready(function() {
     }
 });
 
+async function fetchConfig() {
+    const response = await fetch('/api/config');
+    const config = await response.json();
+    return config.apiBaseUrl;
+}
+
 async function fetchTasks() {
+    const apiBaseUrl = await fetchConfig();
     const token = sessionStorage.getItem('token'); // Get the token from session storage
-    const response = await fetch('http://localhost:3000/api/tasks', {
+    const response = await fetch(`${apiBaseUrl}/api/tasks`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}` // Include the token in the request
@@ -99,9 +106,10 @@ async function addTask() {
         text: input.value
     };
     
+    const apiBaseUrl = await fetchConfig();
     const token = sessionStorage.getItem('token');
 
-    await fetch('http://localhost:3000/api/tasks', {
+    await fetch(`${apiBaseUrl}/api/tasks`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -115,9 +123,10 @@ async function addTask() {
 }
 
 async function deleteTask(event, taskId) {
+    const apiBaseUrl = await fetchConfig();
     const token = sessionStorage.getItem('token');
 
-    await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+    await fetch(`${apiBaseUrl}/api/tasks/${taskId}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${token}`
@@ -129,9 +138,10 @@ async function deleteTask(event, taskId) {
 
 async function updateTask(event, taskId) {
     const taskText = event.target.textContent;
+    const apiBaseUrl = await fetchConfig();
     const token = sessionStorage.getItem('token');
 
-    await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+    await fetch(`${apiBaseUrl}/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -147,6 +157,7 @@ async function taskCompleted(event, taskId) {
     const listItem = event.currentTarget.closest('li');
     const taskInput = listItem.querySelector('.task-text');
     const circle = listItem.querySelector('.circle');
+    const apiBaseUrl = await fetchConfig();
     const token = sessionStorage.getItem('token');
 
     // Determine the new completion state
@@ -161,7 +172,7 @@ async function taskCompleted(event, taskId) {
         createConfetti();
     }
 
-    await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+    await fetch(`${apiBaseUrl}/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
